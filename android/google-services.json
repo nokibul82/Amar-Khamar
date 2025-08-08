@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "45598162080",
+    "project_id": "agriwealth-43a77",
+    "storage_bucket": "agriwealth-43a77.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45598162080:android:c45b6d696f313551f79dc5",
+        "android_client_info": {
+          "package_name": "asia.amarkhamar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCENIZD-CkQaz0OR8Jr8w8nCpGP5zHhlW8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

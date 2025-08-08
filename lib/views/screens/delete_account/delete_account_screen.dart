@@ -1,0 +1,229 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import '../../../config/app_colors.dart';
+import '../../../config/dimensions.dart';
+import '../../../controllers/profile_controller.dart';
+import '../../../themes/themes.dart';
+import '../../../utils/app_constants.dart';
+import '../../../utils/services/helpers.dart';
+import '../../../utils/services/localstorage/hive.dart';
+import '../../../utils/services/localstorage/keys.dart';
+import '../../widgets/app_button.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/custom_textfield.dart';
+import '../../widgets/spacing.dart';
+
+class DeleteAccountScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    TextTheme t = Theme.of(context).textTheme;
+    var storedLanguage = HiveHelp.read(Keys.languageData) ?? {};
+    return GetBuilder<ProfileController>(builder: (_) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          Get.back();
+          _.deleteEditingController.clear();
+          _.deleteFieldColor = AppColors.sliderInActiveColor;
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            onBackPressed: () {
+              Get.back();
+              _.deleteEditingController.clear();
+              _.deleteFieldColor = AppColors.sliderInActiveColor;
+            },
+            title: storedLanguage['Delete Account'] ?? 'Delete Account',
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: Dimensions.kDefaultPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 300.w,
+                    height: 270.h,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            '$rootImageDir/delete_account_image.webp'),
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.redColor, width: .7),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          color: AppColors.redColor.withOpacity(.8),
+                          size: 28.h,
+                        ),
+                        HSpace(15.w),
+                        Expanded(
+                            child: RichText(
+                                text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: "Your account associated with",
+                                style: t.bodySmall?.copyWith(
+                                    height: 1.6.h,
+                                    fontWeight: FontWeight.w400,
+                                    color: Get.isDarkMode
+                                        ? AppColors.black20
+                                        : AppColors.blackColor
+                                            .withOpacity(.9))),
+                            TextSpan(
+                                text: " ${HiveHelp.read(Keys.userEmail)}",
+                                style: t.displayMedium?.copyWith(
+                                  height: 1.6.h,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            TextSpan(
+                                text: " will be delete from both",
+                                style: t.bodySmall?.copyWith(
+                                    height: 1.6.h,
+                                    fontWeight: FontWeight.w400,
+                                    color: Get.isDarkMode
+                                        ? AppColors.black20
+                                        : AppColors.blackColor
+                                            .withOpacity(.9))),
+                            TextSpan(
+                                text: " ${AppConstants.appName} App",
+                                style: t.displayMedium?.copyWith(
+                                  height: 1.6.h,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            TextSpan(
+                                text: " and",
+                                style: t.bodySmall?.copyWith(
+                                    height: 2.h,
+                                    fontWeight: FontWeight.w400,
+                                    color: Get.isDarkMode
+                                        ? AppColors.black20
+                                        : AppColors.blackColor
+                                            .withOpacity(.9))),
+                            TextSpan(
+                                text: " Website.",
+                                style: t.displayMedium?.copyWith(
+                                  height: 1.6.h,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                          ],
+                        ))),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  Text(
+                    'Are you sure you want to delete your account?',
+                    style: t.displayMedium
+                        ?.copyWith(color: AppColors.redColor.withOpacity(.8)),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Deleting your account will remove all your data permanently and this action cannot be undone.',
+                    style: t.displayMedium
+                        ?.copyWith(color: AppThemes.getParagraphColor()),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 40),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "To confirm this, type “DELETE”",
+                      style: t.bodySmall
+                          ?.copyWith(color: AppThemes.getParagraphColor()),
+                    ),
+                  ),
+                  VSpace(8.h),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 5,
+                          child: SizedBox(
+                            height: 40.h,
+                            child: CustomTextField(
+                                borderRadius: BorderRadius.circular(8.r),
+                                bgColor: Colors.transparent,
+                                isBorderColor: true,
+                                borderWidth: 1,
+                                borderColor: _.deleteFieldColor ==
+                                        AppColors.sliderInActiveColor
+                                    ? Get.isDarkMode
+                                        ? AppColors.black80
+                                        : AppColors.sliderInActiveColor
+                                    : _.deleteFieldColor,
+                                hintext: "",
+                                controller: _.deleteEditingController),
+                          )),
+                      HSpace(20.w),
+                      Expanded(
+                        flex: 4,
+                        child: AppButton(
+                          borderRadius: BorderRadius.circular(8.r),
+                          isLoading: _.isDeleteAccount ? true : false,
+                          buttonHeight: 40.h,
+                          text: 'Delete Account',
+                          style: t.displayMedium
+                              ?.copyWith(color: AppColors.whiteColor),
+                          bgColor: AppColors.redColor.withOpacity(.8),
+                          onTap: _.isDeleteAccount
+                              ? null
+                              : () async {
+                                  if (_.deleteEditingController.text.isEmpty) {
+                                    _.deleteFieldColor =
+                                        AppColors.redColor.withOpacity(.8);
+                                    _.update();
+                                    Helpers.showSnackBar(
+                                        msg: "Delete field is required.");
+                                  } else if (_.deleteEditingController.text !=
+                                      "DELETE") {
+                                    _.deleteFieldColor =
+                                        AppColors.redColor.withOpacity(.8);
+                                    _.update();
+                                    Helpers.showSnackBar(
+                                        msg:
+                                            "To confirm deletion, type “DELETE” accurately.");
+                                  } else if (_.deleteEditingController.text ==
+                                      "DELETE") {
+                                    Helpers.hideKeyboard();
+                                    if (HiveHelp.read(Keys.userId) == "1") {
+                                      Helpers.showSnackBar(
+                                          msg:
+                                              "You are currently using a demo version. Feature exploration is enabled, but deletion is restricted.");
+                                    } else {
+                                      await _.deleteAccount();
+                                    }
+                                  }
+                                },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: DeleteAccountScreen(),
+  ));
+}
