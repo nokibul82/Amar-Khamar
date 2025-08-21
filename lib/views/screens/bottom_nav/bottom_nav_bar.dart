@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../controllers/bindings/controller_index.dart';
 import '../../../../config/app_colors.dart';
 import '../../../utils/app_constants.dart';
+import '../../../utils/services/localstorage/hive.dart';
+import '../../../utils/services/localstorage/keys.dart';
 import '../../../utils/services/pop_app.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -16,7 +18,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final Connectivity _connectivity = Connectivity();
-    Future<void> getFcmToken() async {
+  Future<void> getFcmToken() async {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;
     final token = await _fcm.getToken();
     String getFcm = token.toString();
@@ -24,13 +26,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
       await Get.put(FcmController()).saveFcmToken(fcm_token: getFcm);
     }
   }
+
   @override
   void initState() {
     _connectivity.onConnectivityChanged
         .listen(Get.find<AppController>().updateConnectionStatus);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Get.put(ProfileController()).getProfile();
-      getFcmToken();
+      if (HiveHelp.read(Keys.token) != null) {
+        getFcmToken();
+      }
     });
     super.initState();
   }

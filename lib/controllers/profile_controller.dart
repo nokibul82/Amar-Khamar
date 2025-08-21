@@ -64,51 +64,53 @@ class ProfileController extends GetxController {
   String phoneCode = '+1';
   String countryName = 'United States';
   Future getProfile() async {
-    isLoading = true;
-    update();
-    http.Response response = await ProfileRepo.getProfile();
-    profileList.clear();
-    languageList.clear();
-    walletList.clear();
-    isLoading = false;
-    update();
-    var data = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      if (data['status'] == 'success') {
-        if (data['data']['profile'] != null &&
-            data['data']['languages'] != null &&
-            data['data']['languages'] is List) {
-          List<Map<String, dynamic>> list =
-              List.from(data['data']['languages']);
+    if (HiveHelp.read(Keys.token) != null) {
+      isLoading = true;
+      update();
+      http.Response response = await ProfileRepo.getProfile();
+      profileList.clear();
+      languageList.clear();
+      walletList.clear();
+      isLoading = false;
+      update();
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        if (data['status'] == 'success') {
+          if (data['data']['profile'] != null &&
+              data['data']['languages'] != null &&
+              data['data']['languages'] is List) {
+            List<Map<String, dynamic>> list =
+                List.from(data['data']['languages']);
 
-          for (int i = 0; i < list.length; i += 1) {
-            languageList.add(Language(
-              id: list[i]['id'].toString(),
-              name: list[i]['name'].toString(),
-              shortName: list[i]['short_name'].toString(),
-            ));
+            for (int i = 0; i < list.length; i += 1) {
+              languageList.add(Language(
+                id: list[i]['id'].toString(),
+                name: list[i]['name'].toString(),
+                shortName: list[i]['short_name'].toString(),
+              ));
+            }
+            String languageId = data['data']['profile']['language_id'] == null
+                ? "1"
+                : data['data']['profile']['language_id'].toString();
+            var l = list.firstWhere(
+              (e) => e['id'].toString() == languageId,
+              orElse: () => {},
+            );
+            selectedLanguage = l['name'];
+            update();
           }
-          String languageId = data['data']['profile']['language_id'] == null
-              ? "1"
-              : data['data']['profile']['language_id'].toString();
-          var l = list.firstWhere(
-            (e) => e['id'].toString() == languageId,
-            orElse: () => {},
-          );
-          selectedLanguage = l['name'];
-          update();
-        }
-        if (data['data']['profile'] != null)
-          profileList.add(ProfileModel.fromJson(data).data!.profile!);
-        if (profileList.isNotEmpty) {
-          var data = profileList[0];
-          _getInfo(data);
+          if (data['data']['profile'] != null)
+            profileList.add(ProfileModel.fromJson(data).data!.profile!);
+          if (profileList.isNotEmpty) {
+            var data = profileList[0];
+            _getInfo(data);
+          }
+        } else {
+          ApiStatus.checkStatus(data['status'], data['data']);
         }
       } else {
-        ApiStatus.checkStatus(data['status'], data['data']);
+        Helpers.showSnackBar(msg: '${data['data']}');
       }
-    } else {
-      Helpers.showSnackBar(msg: '${data['data']}');
     }
   }
 

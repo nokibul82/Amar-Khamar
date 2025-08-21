@@ -2,8 +2,8 @@ class AppConstants {
   static const String appName = 'Amar Khamar';
 
   //BASE_URL
-  static const String baseUrl = 'https://amarkhamar.asia';
-  // static const String baseUrl = 'http://192.168.0.110/agriwealth';
+  // static const String baseUrl = 'https://amarkhamar.asia';
+  static const String baseUrl = 'http://192.168.0.104/agriwealth';
 
   //END_POINTS_URL
   static const String _ = "/api"; // prefi

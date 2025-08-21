@@ -45,11 +45,12 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     Future.delayed(const Duration(seconds: 3), () {
-         HiveHelp.read(Keys.token) != null
-          ? Get.offAllNamed(RoutesName.mainDrawerScreen)
-          : HiveHelp.read(Keys.isNewUser) != null
-              ? Get.offAllNamed(RoutesName.loginScreen)
-              : Get.offAllNamed(RoutesName.onbordingScreen);
+      Get.offAllNamed(RoutesName.mainDrawerScreen);
+         // HiveHelp.read(Keys.token) != null
+         //  ? Get.offAllNamed(RoutesName.mainDrawerScreen)
+         //  : HiveHelp.read(Keys.isNewUser) != null
+         //      ? Get.offAllNamed(RoutesName.loginScreen)
+         //      : Get.offAllNamed(RoutesName.onbordingScreen);
     });
     super.initState();
   }
