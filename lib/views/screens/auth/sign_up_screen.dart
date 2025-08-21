@@ -256,6 +256,22 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+              child: Align(
+                key: Key("Close"),
+                alignment: Alignment.topRight,
+                child: TextButton(
+                  onPressed: () => Get.offAllNamed(RoutesName.mainDrawerScreen),
+                  child: Text(
+                    "Close",
+                    style: t.bodyMedium?.copyWith(
+                      fontSize: 18.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ));

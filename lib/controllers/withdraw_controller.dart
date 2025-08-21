@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../utils/services/localstorage/hive.dart';
+import '../utils/services/localstorage/keys.dart';
 import 'profile_controller.dart';
 import 'withdraw_history_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -31,66 +33,69 @@ class WithdrawController extends GetxController {
   String type = "";
   String selectedBalanceType = "";
   Future getPayouts() async {
-    _isLoading = true;
-    update();
-    http.Response response = await WithdrawRepo.getPayouts();
-    _isLoading = false;
-    paymentGatewayList = [];
-    dynamicList = [];
-    balanceList = [];
-    flutterwaveTransferList = [];
-    update();
+    if(HiveHelp.read(Keys.token) != null){
+      _isLoading = true;
+      update();
+      http.Response response = await WithdrawRepo.getPayouts();
+      _isLoading = false;
+      paymentGatewayList = [];
+      dynamicList = [];
+      balanceList = [];
+      flutterwaveTransferList = [];
+      update();
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data['status'] == 'success') {
-        paymentGatewayList
-            .addAll(payout.WithdrawGatewayModel.fromJson(data).data!);
-        // balance tye
-        balanceList = List.from(ProfileController.to.walletList)..removeAt(2);
-        if (balanceList.isNotEmpty) type = balanceList[0];
-        selectedBalanceType = "balance";
-        // filter the dynamic field data
-        List list = data['data'];
-        for (var i in list) {
-          if (i['inputForm'] != null && i['inputForm'] is Map) {
-            // dynamic field
-            Map<String, dynamic> dForm = i['inputForm'];
-            dForm.forEach((key, value) {
-              if (value['field_name'] != null && value['field_label'] != null) {
-                dynamicList.add(DynamicFieldModel(
-                  name: i['name'],
-                  fieldName: value['field_name'],
-                  fieldLevel: value['field_label'],
-                  type: value['type'],
-                  validation: value['validation'],
-                ));
-              }
-            });
-          }
-          // if the payment gateway is flutterwave
-          if (i['name'] == "Flutterwave") {
-            if (i['bank_name'] != null && i['bank_name'] is Map) {
-              Map<String, dynamic> dBankMap = i['bank_name'];
-              dBankMap.entries.forEach((e) {
-                Map<String, dynamic> dNestedBankMap = e.value;
-                dNestedBankMap.entries.forEach((x) {
-                  flutterwaveTransferList.add(x.value);
-                });
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          paymentGatewayList
+              .addAll(payout.WithdrawGatewayModel.fromJson(data).data!);
+          // balance tye
+          balanceList = List.from(ProfileController.to.walletList)..removeAt(2);
+          if (balanceList.isNotEmpty) type = balanceList[0];
+          selectedBalanceType = "balance";
+          // filter the dynamic field data
+          List list = data['data'];
+          for (var i in list) {
+            if (i['inputForm'] != null && i['inputForm'] is Map) {
+              // dynamic field
+              Map<String, dynamic> dForm = i['inputForm'];
+              dForm.forEach((key, value) {
+                if (value['field_name'] != null &&
+                    value['field_label'] != null) {
+                  dynamicList.add(DynamicFieldModel(
+                    name: i['name'],
+                    fieldName: value['field_name'],
+                    fieldLevel: value['field_label'],
+                    type: value['type'],
+                    validation: value['validation'],
+                  ));
+                }
               });
             }
+            // if the payment gateway is flutterwave
+            if (i['name'] == "Flutterwave") {
+              if (i['bank_name'] != null && i['bank_name'] is Map) {
+                Map<String, dynamic> dBankMap = i['bank_name'];
+                dBankMap.entries.forEach((e) {
+                  Map<String, dynamic> dNestedBankMap = e.value;
+                  dNestedBankMap.entries.forEach((x) {
+                    flutterwaveTransferList.add(x.value);
+                  });
+                });
+              }
+            }
           }
-        }
 
-        update();
+          update();
+        } else {
+          ApiStatus.checkStatus(data['status'], data['data']);
+          update();
+        }
       } else {
-        ApiStatus.checkStatus(data['status'], data['data']);
+        Helpers.showSnackBar(msg: jsonDecode(response.body)['data']);
+
         update();
       }
-    } else {
-      Helpers.showSnackBar(msg: jsonDecode(response.body)['data']);
-
-      update();
     }
   }
 

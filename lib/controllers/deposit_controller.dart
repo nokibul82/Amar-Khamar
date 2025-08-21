@@ -31,26 +31,28 @@ class DepositController extends GetxController {
   TextEditingController amountCtrl = TextEditingController();
 
   Future getPaymentGateways() async {
-    _isLoading = true;
-    update();
-    http.Response response = await DepositRepo.getGateways();
-    _isLoading = false;
-    update();
+    if(HiveHelp.read(Keys.token) != null){
+      _isLoading = true;
+      update();
+      http.Response response = await DepositRepo.getGateways();
+      _isLoading = false;
+      update();
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data['status'] == 'success') {
-        await getPaymentGateway(data);
-        listenRazorPay();
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          await getPaymentGateway(data);
+          listenRazorPay();
 
-        update();
+          update();
+        } else {
+          ApiStatus.checkStatus(data['status'], data['data']);
+          update();
+        }
       } else {
-        ApiStatus.checkStatus(data['status'], data['data']);
+        Helpers.showSnackBar(msg: jsonDecode(response.body)['data']);
         update();
       }
-    } else {
-      Helpers.showSnackBar(msg: jsonDecode(response.body)['data']);
-      update();
     }
   }
 

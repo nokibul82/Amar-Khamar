@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../controllers/bindings/controller_index.dart';
 import '../../../../config/app_colors.dart';
+import '../../../routes/routes_name.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/services/localstorage/hive.dart';
 import '../../../utils/services/localstorage/keys.dart';
@@ -159,35 +160,66 @@ class _BottomNavBarState extends State<BottomNavBar> {
                             ),
                           ),
                         ),
-                        InkResponse(
-                          onTap: () {
-                            controller.changeScreen(3);
-                          },
-                          child: Container(
-                            width: 45.h,
-                            height: 45.h,
-                            padding: EdgeInsets.all(10.h),
-                            decoration: BoxDecoration(
-                              color: controller.selectedIndex == 3
-                                  ? _.isDarkMode() == true
-                                      ? AppColors.darkBgColor
-                                      : AppColors.whiteColor
-                                  : Colors.transparent,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image.asset(
-                              controller.selectedIndex == 3
-                                  ? "$rootImageDir/person2.png"
-                                  : "$rootImageDir/person.png",
-                              color: _.isDarkMode() == true
-                                  ? AppColors.black10
-                                  : controller.selectedIndex == 3
-                                      ? AppColors.blackColor
-                                      : AppColors.paragraphColor,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ),
+                        HiveHelp.read(Keys.token) != null
+                            ? InkResponse(
+                                onTap: () {
+                                  controller.changeScreen(3);
+                                },
+                                child: Container(
+                                  width: 45.h,
+                                  height: 45.h,
+                                  padding: EdgeInsets.all(10.h),
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedIndex == 3
+                                        ? _.isDarkMode() == true
+                                            ? AppColors.darkBgColor
+                                            : AppColors.whiteColor
+                                        : Colors.transparent,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    controller.selectedIndex == 3
+                                        ? "$rootImageDir/person2.png"
+                                        : "$rootImageDir/person.png",
+                                    color: _.isDarkMode() == true
+                                        ? AppColors.black10
+                                        : controller.selectedIndex == 3
+                                            ? AppColors.blackColor
+                                            : AppColors.paragraphColor,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              )
+                            : InkResponse(
+                                onTap: () {
+                                  Get.offAllNamed(RoutesName.signUpScreen);
+                                  // controller.changeScreen(3);
+                                },
+                                child: Container(
+                                  width: 45.h,
+                                  height: 45.h,
+                                  padding: EdgeInsets.all(10.h),
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedIndex == 3
+                                        ? _.isDarkMode() == true
+                                            ? AppColors.darkBgColor
+                                            : AppColors.whiteColor
+                                        : Colors.transparent,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    controller.selectedIndex == 3
+                                        ? "$rootImageDir/login2.png"
+                                        : "$rootImageDir/login.png",
+                                    color: _.isDarkMode() == true
+                                        ? AppColors.black10
+                                        : controller.selectedIndex == 3
+                                            ? AppColors.blackColor
+                                            : AppColors.paragraphColor,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              )
                       ],
                     ),
                   ),

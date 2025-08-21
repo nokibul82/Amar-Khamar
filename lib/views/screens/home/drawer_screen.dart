@@ -85,125 +85,138 @@ class DrawerScreen extends StatelessWidget {
                                 color: AppColors.secondaryColor)),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          buildDrawerTile(context,
-                              imgSize: 22.h,
-                              imgPath: "plan_invest_history",
-                              title: storedLanguage['Plan History'] ??
-                                  "Plan History", onTap: () {
-                            Get.toNamed(RoutesName.planinvestmentHistoryScreen);
-                          }),
-                          buildDrawerTile(context,
-                              imgSize: 19.h,
-                              imgPath: "project_invest_history",
-                              title: storedLanguage['Project History'] ??
-                                  "Project History", onTap: () {
-                            Get.toNamed(
-                                RoutesName.projectInvestmentHistoryScreen);
-                          }),
-                          if (HiveHelp.read(Keys.ecommerceStatus) == true)
-                            Container(
-                              margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                              height: 1.h,
-                              width: 190.w,
-                              color: _.isDarkMode() == true
-                                  ? AppColors.darkCardColorDeep
-                                  : AppColors.secondaryColor,
+                    HiveHelp.read(Keys.token) != null
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 15.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                buildDrawerTile(context,
+                                    imgSize: 22.h,
+                                    imgPath: "plan_invest_history",
+                                    title: storedLanguage['Plan History'] ??
+                                        "Plan History", onTap: () {
+                                  Get.toNamed(
+                                      RoutesName.planinvestmentHistoryScreen);
+                                }),
+                                buildDrawerTile(context,
+                                    imgSize: 19.h,
+                                    imgPath: "project_invest_history",
+                                    title: storedLanguage['Project History'] ??
+                                        "Project History", onTap: () {
+                                  Get.toNamed(RoutesName
+                                      .projectInvestmentHistoryScreen);
+                                }),
+                                if (HiveHelp.read(Keys.ecommerceStatus) == true)
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: 10.h, bottom: 10.h),
+                                    height: 1.h,
+                                    width: 190.w,
+                                    color: _.isDarkMode() == true
+                                        ? AppColors.darkCardColorDeep
+                                        : AppColors.secondaryColor,
+                                  ),
+                                if (HiveHelp.read(Keys.ecommerceStatus) == true)
+                                  buildDrawerTile(context,
+                                      imgSize: 19.h,
+                                      isFromShop: true,
+                                      imgPath: "product",
+                                      title: storedLanguage['Products'] ??
+                                          "Products", onTap: () {
+                                    Get.toNamed(RoutesName.productScreen);
+                                  }),
+                                if (HiveHelp.read(Keys.ecommerceStatus) == true)
+                                  buildDrawerTile(context,
+                                      imgSize: 19.h,
+                                      isFromShop: true,
+                                      imgPath: "orders",
+                                      title: storedLanguage['My Orders'] ??
+                                          "My Orders", onTap: () {
+                                    Get.toNamed(RoutesName.myOrdersScreen);
+                                  }),
+                                if (HiveHelp.read(Keys.ecommerceStatus) == true)
+                                  buildDrawerTile(context,
+                                      imgSize: 19.h,
+                                      isFromShop: true,
+                                      imgPath: "love",
+                                      title: storedLanguage['WishList'] ??
+                                          "WishList", onTap: () {
+                                    Get.toNamed(RoutesName.wishlistScreen);
+                                  }),
+                                if (HiveHelp.read(Keys.ecommerceStatus) == true)
+                                  buildDrawerTile(context,
+                                      imgSize: 19.h,
+                                      isFromShop: true,
+                                      imgPath: "addCart",
+                                      title: storedLanguage['My Cart'] ??
+                                          "My Cart", onTap: () async {
+                                    await ProductManageController.to
+                                        .calculateAmount();
+                                    Get.toNamed(RoutesName.myCartScreen);
+                                  }),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(top: 10.h, bottom: 10.h),
+                                  height: 1.h,
+                                  width: 190.w,
+                                  color: _.isDarkMode() == true
+                                      ? AppColors.darkCardColorDeep
+                                      : AppColors.secondaryColor,
+                                ),
+                                buildDrawerTile(context,
+                                    imgSize: 19.h,
+                                    imgPath: "deposit_history",
+                                    title: storedLanguage['Deposit History'] ??
+                                        "Deposit History", onTap: () {
+                                  Get.toNamed(RoutesName.depositHistoryScreen);
+                                }),
+                                buildDrawerTile(context,
+                                    imgSize: 19.h,
+                                    imgPath: "payout_history",
+                                    title: storedLanguage['Withdraw History'] ??
+                                        "Withdraw History", onTap: () {
+                                  Get.toNamed(RoutesName.withdrawHistoryScreen);
+                                }),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(top: 10.h, bottom: 10.h),
+                                  height: 1.h,
+                                  width: 190.w,
+                                  color: _.isDarkMode() == true
+                                      ? AppColors.darkCardColorDeep
+                                      : AppColors.secondaryColor,
+                                ),
+                                buildDrawerTile(context,
+                                    imgPath: "referral",
+                                    title: storedLanguage['Referral'] ??
+                                        "Referral", onTap: () {
+                                  Get.toNamed(RoutesName.referralScreen);
+                                }),
+                                buildDrawerTile(context,
+                                    imgPath: "bonus",
+                                    title: storedLanguage['Referral Bonus'] ??
+                                        "Referral Bonus", onTap: () {
+                                  Get.toNamed(RoutesName.referralBonusScreen);
+                                }),
+                                buildDrawerTile(context,
+                                    imgPath: "support",
+                                    title: storedLanguage['Support Ticket'] ??
+                                        "Support Ticket", onTap: () {
+                                  Get.toNamed(
+                                      RoutesName.supportTicketListScreen);
+                                }),
+                                VSpace(50.h),
+                              ],
                             ),
-                          if (HiveHelp.read(Keys.ecommerceStatus) == true)
-                            buildDrawerTile(context,
-                                imgSize: 19.h,
-                                isFromShop: true,
-                                imgPath: "product",
-                                title: storedLanguage['Products'] ?? "Products",
-                                onTap: () {
-                              Get.toNamed(RoutesName.productScreen);
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(left: 15.w),
+                            child: buildDrawerTile(context,
+                                imgPath: "login", title: "Login", onTap: () {
+                              Get.offAllNamed(RoutesName.loginScreen);
                             }),
-                          if (HiveHelp.read(Keys.ecommerceStatus) == true)
-                            buildDrawerTile(context,
-                                imgSize: 19.h,
-                                isFromShop: true,
-                                imgPath: "orders",
-                                title: storedLanguage['My Orders'] ??
-                                    "My Orders", onTap: () {
-                              Get.toNamed(RoutesName.myOrdersScreen);
-                            }),
-                          if (HiveHelp.read(Keys.ecommerceStatus) == true)
-                            buildDrawerTile(context,
-                                imgSize: 19.h,
-                                isFromShop: true,
-                                imgPath: "love",
-                                title: storedLanguage['WishList'] ?? "WishList",
-                                onTap: () {
-                              Get.toNamed(RoutesName.wishlistScreen);
-                            }),
-                          if (HiveHelp.read(Keys.ecommerceStatus) == true)
-                            buildDrawerTile(context,
-                                imgSize: 19.h,
-                                isFromShop: true,
-                                imgPath: "addCart",
-                                title: storedLanguage['My Cart'] ?? "My Cart",
-                                onTap: () async {
-                              await ProductManageController.to
-                                  .calculateAmount();
-                              Get.toNamed(RoutesName.myCartScreen);
-                            }),
-                          Container(
-                            margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                            height: 1.h,
-                            width: 190.w,
-                            color: _.isDarkMode() == true
-                                ? AppColors.darkCardColorDeep
-                                : AppColors.secondaryColor,
                           ),
-                          buildDrawerTile(context,
-                              imgSize: 19.h,
-                              imgPath: "deposit_history",
-                              title: storedLanguage['Deposit History'] ??
-                                  "Deposit History", onTap: () {
-                            Get.toNamed(RoutesName.depositHistoryScreen);
-                          }),
-                          buildDrawerTile(context,
-                              imgSize: 19.h,
-                              imgPath: "payout_history",
-                              title: storedLanguage['Withdraw History'] ??
-                                  "Withdraw History", onTap: () {
-                            Get.toNamed(RoutesName.withdrawHistoryScreen);
-                          }),
-                          Container(
-                            margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                            height: 1.h,
-                            width: 190.w,
-                            color: _.isDarkMode() == true
-                                ? AppColors.darkCardColorDeep
-                                : AppColors.secondaryColor,
-                          ),
-                          buildDrawerTile(context,
-                              imgPath: "referral",
-                              title: storedLanguage['Referral'] ?? "Referral",
-                              onTap: () {
-                            Get.toNamed(RoutesName.referralScreen);
-                          }),
-                          buildDrawerTile(context,
-                              imgPath: "bonus",
-                              title: storedLanguage['Referral Bonus'] ??
-                                  "Referral Bonus", onTap: () {
-                            Get.toNamed(RoutesName.referralBonusScreen);
-                          }),
-                          buildDrawerTile(context,
-                              imgPath: "support",
-                              title: storedLanguage['Support Ticket'] ??
-                                  "Support Ticket", onTap: () {
-                            Get.toNamed(RoutesName.supportTicketListScreen);
-                          }),
-                          VSpace(50.h),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),

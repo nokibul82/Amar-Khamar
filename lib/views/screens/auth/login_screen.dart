@@ -157,7 +157,7 @@ class LoginScreen extends StatelessWidget {
                     Material(
                       color: Colors.transparent,
                       child: AppButton(
-                         text: storedLanguage['Sign In'] ?? "Sign In",
+                        text: storedLanguage['Sign In'] ?? "Sign In",
                         style: t.bodyLarge?.copyWith(
                             fontSize: 20.sp, color: AppColors.whiteColor),
                         isLoading: controller.isLoading ? true : false,
@@ -180,7 +180,7 @@ class LoginScreen extends StatelessWidget {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                          storedLanguage['Don\'t have an account?'] ??
+                        storedLanguage['Don\'t have an account?'] ??
                             "Don’t have an account?",
                         style: t.displayMedium?.copyWith(
                           color: AppThemes.getHintColor(),
@@ -195,7 +195,7 @@ class LoginScreen extends StatelessWidget {
                           Get.toNamed(RoutesName.signUpScreen);
                         },
                         child: Text(
-                       storedLanguage['Create account'] ?? "Create account",
+                          storedLanguage['Create account'] ?? "Create account",
                           style: t.bodyMedium?.copyWith(
                             fontSize: 18.sp,
                           ),
@@ -203,6 +203,22 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+              child: Align(
+                key: Key("Close"),
+                alignment: Alignment.topRight,
+                child: TextButton(
+                  onPressed: () => Get.offAllNamed(RoutesName.mainDrawerScreen),
+                  child: Text(
+                    "Close",
+                    style: t.bodyMedium?.copyWith(
+                      fontSize: 18.sp,
+                    ),
+                  ),
                 ),
               ),
             ),
