@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import '../../../config/app_colors.dart';
 import '../../../config/dimensions.dart';
 import '../../../controllers/plan_controller.dart';
+import '../../../controllers/transaction_controller.dart';
+import '../../../routes/routes_name.dart';
 import '../../../themes/themes.dart';
 import '../../../utils/services/helpers.dart';
 import '../../../utils/services/localstorage/keys.dart';
@@ -367,8 +369,15 @@ class PlanInvestScreen extends StatelessWidget {
                 onTap: _.isPayment
                     ? null
                     : () async {
-                        await _.onMakePaymentBtnClick(
-                            context: context, planId: data.id.toString());
+                        if (HiveHelp.read(Keys.token) != null) {
+                          await _.onMakePaymentBtnClick(
+                              context: context, planId: data.id.toString());
+                        } else {
+                          Get.find<TransactionController>().transactionList =
+                              [];
+                          Get.find<TransactionController>().update();
+                          Get.offAllNamed(RoutesName.loginScreen);
+                        }
                       },
                 text: storedLanguage['Make Payment'] ?? "Make Payment",
               );

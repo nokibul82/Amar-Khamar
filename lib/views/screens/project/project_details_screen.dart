@@ -17,7 +17,9 @@ import 'package:readmore/readmore.dart';
 import '../../../config/app_colors.dart';
 import '../../../config/dimensions.dart';
 import '../../../config/styles.dart';
+import '../../../controllers/transaction_controller.dart';
 import '../../../data/models/project_model.dart' as p;
+import '../../../routes/routes_name.dart';
 import '../../../utils/services/localstorage/hive.dart';
 import '../../../utils/services/localstorage/keys.dart';
 import '../../widgets/appDialog.dart';
@@ -699,10 +701,16 @@ class ProjectDetailsScreen extends StatelessWidget {
                 onTap: _.isPayment
                     ? null
                     : () async {
-                        await _.onMakePaymentBtnClick(
-                            context: context,
-                            projectId: data.id.toString(),
-                            unit: _.increment.toString());
+                        if(HiveHelp.read(Keys.token) != null){
+                          await _.onMakePaymentBtnClick(
+                              context: context,
+                              projectId: data.id.toString(),
+                              unit: _.increment.toString());
+                        }else{
+                          Get.find<TransactionController>().transactionList = [];
+                          Get.find<TransactionController>().update();
+                          Get.offAllNamed(RoutesName.loginScreen);
+                        }
                       },
                 text: storedLanguage['Make Payment'] ?? "Make Payment",
               );
